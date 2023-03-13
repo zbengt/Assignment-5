@@ -9,14 +9,38 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{r load, echo=FALSE}
+library(magrittr)
+library(ggplot2)
+install.packages("ggtext")
+library(ggtext)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+siscowet <- read.csv("~/Desktop/github/Assignment-5/data/siscowet.csv")
+```
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r weightvslength}
+ siscowet %>%
+        ggplot(aes(x=len,y=wgt)) +
+        geom_point()
+```
+```{r lenvswgtlm}
+siscowet %>%
+        ggplot(aes(x=len,
+                   y=wgt,
+                   color=locID)) +
+        geom_point() + 
+        ylab("Weight (g)") + 
+        xlab("Total length (mm)") + 
+        labs(color="Location",
+             title = "<b> Fish weight increases with length</b><br>") +
+        theme_minimal() + 
+        theme(
+                plot.title.position = "plot",
+                  plot.title = element_textbox_simple(size=12),
+                axis.title.y = element_text(angle = 0, vjust = 0.5,size=14),
+              axis.text = element_text(size=12),
+              legend.position = "none") + 
+          geom_smooth(method = "lm", se = FALSE)
 ```
 
 ## Including Plots
